@@ -1,0 +1,105 @@
+<script>
+let colorArr = []
+
+function renderColors() {
+    let html = ""
+    for (let color of colorArr) {
+        html += `
+            <p>${color}</p>
+        `
+        console.log(color)
+    }
+    
+    document.getElementById("hexCodes").innerHTML = html
+    document.getElementById("colorOne").style.backgroundColor = colorArr[0]
+    document.getElementById("colorTwo").style.backgroundColor = colorArr[1]
+    document.getElementById("colorThree").style.backgroundColor = colorArr[2]
+    document.getElementById("colorFour").style.backgroundColor = colorArr[3]
+    document.getElementById("colorFive").style.backgroundColor = colorArr[4]
+
+    document.getElementById("colorHex1").innerHTML = colorArr[0]
+    document.getElementById("colorHex2").innerHTML = colorArr[1]
+    document.getElementById("colorHex3").innerHTML = colorArr[2]
+    document.getElementById("colorHex4").innerHTML = colorArr[3]
+    document.getElementById("colorHex5").innerHTML = colorArr[4]
+}
+
+document.getElementById("getColorBtn").addEventListener('click', function(){
+
+    let hex = document.getElementById("colorInput").value
+    const fixedHex = hex.replace(/[^a-zA-Z0-9 ]/g, '', "#")
+    console.log(fixedHex)
+    
+    let mode = document.getElementById("colorDropBox").value
+    console.log(mode)
+    
+    fetch(`https://www.thecolorapi.com/scheme?hex=${fixedHex}&mode=${mode}&count=5`)
+    .then(res => res.json())
+    .then(data => {
+        colorArr = data.colors.map(color => (color.hex.value))
+        console.log(colorArr) 
+        renderColors()
+})
+})
+</script>
+
+
+<div class="colorContainer">
+    <div class="color" id="colorOne">
+        <p id="colorHex1"></p>
+    </div>
+    <div class="color" id="colorTwo">
+        <p id="colorHex2"></p>
+    </div>
+    <div class="color" id="colorThree">
+        <p id="colorHex3"></p>
+    </div>
+    <div class="color" id="colorFour">
+        <p id="colorHex4"></p>
+    </div>
+    <div class="color" id="colorFive">
+        <p id="colorHex5"></p>
+    </div>
+</div>
+
+<style>
+    p {
+        color: white;
+        text-align: center;
+        line-height: 80px;
+        margin: 0;
+    }
+
+    .colorContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;  
+        height: 100%;
+    }
+
+    .color{
+        width: 100%;
+        height: 80px;
+        background-color:lightgray;
+    }
+
+    @media (width >= 500px) {
+
+        p {
+            display: none;
+        }
+
+        .colorContainer{
+            display: flex;
+            justify-content: center; 
+            flex-direction: row;
+            height: 80vh;
+        }
+
+        .color{
+            width: 100%;
+            background-color:lightgray;
+            height: 100%;
+        }
+    }
+</style>
